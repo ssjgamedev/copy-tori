@@ -6,9 +6,9 @@ const JUMP_VELOCITY = 0
 @onready var animatedSprite = $AnimatedSprite2D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = 100#ProjectSettings.get_setting("physics/2d/default_gravity")
+var gravity = 100 #ProjectSettings.get_setting("physics/2d/default_gravity")
 
-
+#going to set gravity to zero when pressing up or down on ladder area
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
