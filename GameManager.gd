@@ -11,14 +11,13 @@ func _ready():
 			coinsArray.append(child)
 	for coin in coinsArray:
 		print(coin.name)
-	print("I have " + str(coinsArray.size()) + " coins")
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var coinsParent = get_node("/root/Game/Coins")
 	
 	if coinsParent.get_children().size() <= 0 && !levelGoalAchieved:
-		print("I collected all the coins")
+		
 		levelGoalAchieved = true
-	elif coinsParent.get_children().size() > 0:
-		print("I have " + str(coinsParent.get_children().size()) + " coins left")
+	

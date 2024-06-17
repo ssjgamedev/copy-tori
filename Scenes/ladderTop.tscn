@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://chun6u87shq3h"]
+
+[ext_resource type="Script" path="res://Scripts/ladderTop.gd" id="1_bnivo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h088h"]
+size = Vector2(16.5, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hh51p"]
+size = Vector2(8, 2.5)
+
+[node name="LadderTop" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_bnivo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_h088h")
+one_way_collision = true
+
+[node name="AboveChecker" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AboveChecker"]
+position = Vector2(0, -7.75)
+shape = SubResource("RectangleShape2D_hh51p")
+
+[connection signal="body_entered" from="AboveChecker" to="." method="_on_above_checker_body_entered"]
+[connection signal="body_exited" from="AboveChecker" to="." method="_on_above_checker_body_exited"]
