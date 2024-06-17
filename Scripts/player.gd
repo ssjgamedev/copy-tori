@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 
 const SPEED = 50
-const LadderSpeed = -100
+const LadderSpeed = -50
 const JUMP_VELOCITY = -300
 const gravityCONSTANT = 40
 @onready var animatedSprite = $AnimatedSprite2D

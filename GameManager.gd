@@ -2,6 +2,7 @@ extends Node
 
 var coinsArray = []
 var levelGoalAchieved = false
+@onready var timer = $Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,4 +21,12 @@ func _process(delta):
 	if coinsParent.get_children().size() <= 0 && !levelGoalAchieved:
 		
 		levelGoalAchieved = true
+		Engine.time_scale = 0.6
+		timer.start()
+	
+
+
+func _on_timer_timeout():
+	Engine.time_scale = 1.0
+	get_tree().reload_current_scene()
 	
