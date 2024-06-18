@@ -56,3 +56,6 @@ frame_progress = 0.0565838
 z_index = 1
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_told1")
+
+[node name="Marker" type="Node2D" parent="."]
+position = Vector2(14, 4)
