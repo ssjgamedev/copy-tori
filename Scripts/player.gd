@@ -77,7 +77,8 @@ func shoot():
 	var bulletProjectile = Bullet.instantiate()
 	if facingLeft:
 		print("I should be shooting left")
-		bulletProjectile.start($Marker.global_position, deg_to_rad(180))
+		bulletProjectile.get_child(0).flip_v = true
+		bulletProjectile.start($Marker2.global_position, deg_to_rad(180))
 	else:
 		bulletProjectile.start($Marker.global_position, rotation)
 	get_tree().root.add_child(bulletProjectile)
