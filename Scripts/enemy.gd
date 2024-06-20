@@ -7,15 +7,17 @@ const speed = 40
 @onready var raycastDownRight = $RayCast2DDownRight
 @onready var raycastLeft = $RayCast2DLeft
 @onready var raycastRight = $RayCast2DRight
-@onready var collisionShape = $Killzone/CollisionShape2D
+@onready var collisionShape = $Area2D/CollisionShape2D
 @onready var raycastDownCenter = $RayCast2DDownCenter
+@onready var frozenCollisionShape = $StaticBody2D/CollisionShape2D
+
 
 var direction = 1
 var isInAir = true
+var isFrozen = false
 
 func _ready():
-	pass#isInAir = true
-	#position.y += direction * speed * delta
+	frozenCollisionShape.set_deferred("disabled", true)
 
 func _process(delta):
 	raycastDownLeft.force_raycast_update()
@@ -28,7 +30,7 @@ func _process(delta):
 		isInAir = true
 		position.y += direction * speed * delta
 	
-	if !isInAir:
+	if !isInAir && !isFrozen:
 		if (!raycastDownLeft.is_colliding() || !raycastDownRight.is_colliding() || raycastLeft.is_colliding() || raycastRight.is_colliding()):
 			direction *= -1
 		if direction < 0:
@@ -40,6 +42,8 @@ func _process(delta):
 	if(raycastDownCenter.is_colliding()):
 		isInAir = false
 		position.y = position.y
+	if(isFrozen):
+		position.x = position.x
 	
 	
 func hit():
@@ -49,6 +53,10 @@ func hit():
 func _on_area_2d_body_entered(body):
 	if body is Bullet:
 		print ("I hit a bullet")
+		isFrozen = true
+		collisionShape.set_deferred("disabled",true)
+		frozenCollisionShape.set_deferred("disabled", false)
+		animated_sprite_2d.stop()
 	if body is Player:
 		print("I hit Player")
 		#body.queue_free()

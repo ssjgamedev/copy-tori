@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dxnioaaamfhr2"]
+[gd_scene load_steps=14 format=3 uid="uid://dxnioaaamfhr2"]
 
 [ext_resource type="Texture2D" uid="uid://rl67i3o56oq2" path="res://assets/sprites/slime_green.png" id="1_5vgwn"]
 [ext_resource type="Script" path="res://Scripts/enemy.gd" id="1_tovwi"]
@@ -70,6 +70,9 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xmqs4"]
+size = Vector2(14, 12)
+
 [node name="Enemy" type="Node2D"]
 script = ExtResource("1_tovwi")
 
@@ -115,5 +118,11 @@ collide_with_areas = true
 sprite_frames = SubResource("SpriteFrames_yjue0")
 autoplay = "default"
 frame_progress = 0.786676
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_xmqs4")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
