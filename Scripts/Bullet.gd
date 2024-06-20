@@ -1,6 +1,8 @@
+class_name Bullet
 extends CharacterBody2D
 
 const SPEED = 100
+
 
 func start(_position, _direction):
 	rotation = _direction

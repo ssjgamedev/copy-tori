@@ -1,3 +1,5 @@
+class_name Player
+
 extends CharacterBody2D
 
 
@@ -23,13 +25,13 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 		#velocity.x = 0
 	if isTouchingLadder && Input.is_action_pressed("up"):
-		print("pressing up")
+		
 		velocity.y = LadderSpeed
-		print(str(velocity.y))
+
 	elif isTouchingLadder && Input.is_action_pressed("down"):
-		print("pressing down")
+
 		velocity.y = -LadderSpeed
-		print(str(velocity.y))
+
 	elif isTouchingLadder && (Input.is_action_just_released("up") || Input.is_action_just_released("down") ):
 		velocity.y = 0
 		gravity = 0
@@ -38,7 +40,7 @@ func _physics_process(delta):
 		velocity.y = gravity
 		
 	elif isTouchingLadder && Input.is_action_just_pressed("down"):
-		print("pressing down")
+
 		velocity.y = gravity
 		
 	# Handle Jump.
@@ -76,7 +78,7 @@ func updateLadderPhysics():
 func shoot():
 	var bulletProjectile = Bullet.instantiate()
 	if facingLeft:
-		print("I should be shooting left")
+
 		bulletProjectile.get_child(0).flip_v = true
 		bulletProjectile.start($Marker2.global_position, deg_to_rad(180))#added a second marker for the left side
 	else:

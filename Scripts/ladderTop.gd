@@ -11,10 +11,10 @@ func _physics_process(delta):
 		collision_shape_2d.rotation_degrees = 0
 
 func _on_above_checker_body_entered(body):
-	print("I touched the top of ladder")
+	
 	aboveLadder = true
 
 
 func _on_above_checker_body_exited(body):
-	print("I am not touching the top of ladder anymore")
+	
 	aboveLadder = false

@@ -21,9 +21,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_cvspl"]
 radius = 6.08276
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
-collision_layer = 0
-collision_mask = 0
+[node name="Bullet" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 4
 script = ExtResource("1_7s57p")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

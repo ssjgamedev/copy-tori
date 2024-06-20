@@ -9,7 +9,7 @@ size = Vector2(16.5, 2)
 size = Vector2(8, 2.5)
 
 [node name="LadderTop" type="StaticBody2D"]
-collision_mask = 0
+collision_layer = 8
 script = ExtResource("1_bnivo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

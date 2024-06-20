@@ -1,44 +1,44 @@
-[gd_scene load_steps=13 format=3 uid="uid://dxnioaaamfhr2"]
+[gd_scene load_steps=13 format=3 uid="uid://bb0wirortlaey"]
 
-[ext_resource type="Texture2D" uid="uid://rl67i3o56oq2" path="res://assets/sprites/slime_green.png" id="1_5vgwn"]
-[ext_resource type="Script" path="res://Scripts/enemy.gd" id="1_tovwi"]
+[ext_resource type="Texture2D" uid="uid://rl67i3o56oq2" path="res://assets/sprites/slime_green.png" id="1_i7au0"]
+[ext_resource type="Script" path="res://Scripts/Creature.gd" id="1_tpgcc"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f4hsy"]
-size = Vector2(14, 9)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_055fe"]
+size = Vector2(27, 9.75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p2igh"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vqhn7"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(24, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r884s"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(48, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xjgyl"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(72, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i3qg8"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(0, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cjsb2"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(24, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m4kdn"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(48, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5812a"]
-atlas = ExtResource("1_5vgwn")
+atlas = ExtResource("1_i7au0")
 region = Rect2(72, 24, 24, 24)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_yjue0"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_kjs41"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -70,31 +70,23 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Enemy" type="Node2D"]
-script = ExtResource("1_tovwi")
-
-[node name="Area2D" type="Area2D" parent="."]
-position = Vector2(0, 7.5)
+[node name="Creature" type="CharacterBody2D"]
 collision_layer = 4
-collision_mask = 7
+collision_mask = 17
+script = ExtResource("1_tpgcc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_f4hsy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-6.5, 6.875)
+shape = SubResource("RectangleShape2D_055fe")
 
 [node name="RayCast2DDownRight" type="RayCast2D" parent="."]
-position = Vector2(7, 12)
+position = Vector2(8, 11)
 target_position = Vector2(0, 5)
 collision_mask = 16
 collide_with_areas = true
 
 [node name="RayCast2DDownLeft" type="RayCast2D" parent="."]
-position = Vector2(-7, 12)
-target_position = Vector2(0, 5)
-collision_mask = 16
-collide_with_areas = true
-
-[node name="RayCast2DDownCenter" type="RayCast2D" parent="."]
-position = Vector2(0, 8)
+position = Vector2(-7, 11)
 target_position = Vector2(0, 5)
 collision_mask = 16
 collide_with_areas = true
@@ -112,8 +104,9 @@ collision_mask = 16
 collide_with_areas = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_yjue0")
+sprite_frames = SubResource("SpriteFrames_kjs41")
 autoplay = "default"
-frame_progress = 0.786676
 
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
