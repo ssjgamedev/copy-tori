@@ -57,6 +57,9 @@ z_index = 1
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_told1")
 
+[node name="BlockMarker" type="Node2D" parent="."]
+position = Vector2(16, 3)
+
 [node name="Marker" type="Node2D" parent="."]
 position = Vector2(13, 3)
 

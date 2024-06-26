@@ -50,12 +50,14 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	direction = Input.get_axis("ui_left", "ui_right")
-	if direction < 0:
-		animatedSprite.flip_h = true
+	if Input.is_action_pressed("ui_left") && !facingLeft:
+		#animatedSprite.flip_h = true
 		facingLeft = true
-	elif direction > 0:
-		animatedSprite.flip_h = false
+		scale.x *= -1
+	elif Input.is_action_pressed("ui_right") && facingLeft :
+		#animatedSprite.flip_h = false
 		facingLeft = false
+		scale.x *= -1
 	if direction && is_on_floor() || direction && isTouchingLadder:
 		velocity.x = direction * SPEED
 		
@@ -80,7 +82,7 @@ func shoot():
 	if facingLeft:
 
 		bulletProjectile.get_child(0).flip_v = true
-		bulletProjectile.start($Marker2.global_position, deg_to_rad(180))#added a second marker for the left side
-	else:
-		bulletProjectile.start($Marker.global_position, rotation)
+	#	bulletProjectile.start($Marker2.global_position, deg_to_rad(180))#added a second marker for the left side
+	#else:
+	bulletProjectile.start($Marker.global_position, rotation)
 	get_tree().root.add_child(bulletProjectile)
