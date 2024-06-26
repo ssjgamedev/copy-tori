@@ -3,6 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://csiesswfxirq2" path="res://assets/sprites/world_tileset.png" id="1_di2xh"]
 [ext_resource type="Script" path="res://Scripts/block.gd" id="1_mbseh"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ydnao"]
+size = Vector2(16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_1w857"]
 atlas = ExtResource("1_di2xh")
 region = Rect2(128, 32, 16, 16)
@@ -18,20 +21,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ydnao"]
-size = Vector2(16, 16)
-
-[node name="Block" type="Node2D"]
+[node name="block" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 31
 script = ExtResource("1_mbseh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ydnao")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_j5f8i")
-
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-collision_layer = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
-shape = SubResource("RectangleShape2D_ydnao")
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(5, 0)
@@ -42,5 +41,3 @@ position = Vector2(-5, 0)
 target_position = Vector2(-8, 0)
 
 [node name="Timer" type="Timer" parent="."]
-
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

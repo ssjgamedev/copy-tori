@@ -57,6 +57,7 @@ func _on_area_2d_body_entered(body):
 		collisionShape.set_deferred("disabled",true)
 		frozenCollisionShape.set_deferred("disabled", false)
 		animated_sprite_2d.stop()
+		body.queue_free()# release the bullet
 	if body is Player:
 		print("I hit Player")
 		#body.queue_free()

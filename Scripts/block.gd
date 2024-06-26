@@ -1,10 +1,11 @@
-extends Node2D
+extends CharacterBody2D
 
 # Reference to the Player node and the CharacterBody2D child
 @onready var playerMarker = $"../Player"
 @onready var character_body = $CharacterBody2D
 var isPickedUp = false
 @onready var block = $"."
+var gravity = 40
 
 
 func _ready():
@@ -17,7 +18,10 @@ func _process(delta):
 		isPickedUp = !isPickedUp
 	if isPickedUp:
 		move_behind_player()
+	elif !isPickedUp:
+		velocity.y = gravity
 
+	move_and_slide()
 # Function to move the block's CharacterBody2D directly behind the player over time
 func move_behind_player():
 	position = playerMarker.get_child(2).global_position
