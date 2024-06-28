@@ -61,3 +61,5 @@ func _on_area_2d_body_entered(body):
 	if body is Player:
 		print("I hit Player")
 		#body.queue_free()
+	if body is Block:
+		direction *= -1
