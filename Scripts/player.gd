@@ -24,6 +24,7 @@ var direction = 0
 var facingLeft = false
 var isInAir = false
 var isTeleporting = false
+var last_positionTeleport = Vector2.ZERO
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = gravityCONSTANT #ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -88,39 +89,13 @@ func _physics_process(delta):
 		PlayerState.AIR:
 			print("I am in the AIR state")
 			
-			velocity.y += gravity * delta
+			velocity.y += 40 * delta
 			velocity.x = 0
 			move_and_slide()
+			print(gravity)
 			
 		PlayerState.TELEPORTING:
-			print("I am in the TELEPORTING state")
-			
-			if teleport_timer > 0 :
-				teleport_timer -= delta
-		
-			if Input.is_action_just_pressed("teleport") && teleport_timer <= 0 && !isTeleporting:
-				isTeleporting = true
-				try_teleport()
-			
-			if isTeleporting:
-		
-				var teleportDirection = Vector2.ZERO
-			
-				if Input.is_action_pressed("ui_right"):
-						print("teleport right")
-						teleportDirection.x += 1
-				elif Input.is_action_pressed("ui_left"):
-					teleportDirection.x -= 1
-				elif Input.is_action_pressed("ui_down"):
-					teleportDirection.y += 1
-				elif Input.is_action_pressed("ui_up"):
-					teleportDirection.y -= 1
-
-				if teleportDirection != Vector2.ZERO:
-					print("Moving telePort")
-					teleportDirection = teleportDirection.normalized()
-					show_outline(teleportDirection)
-					
+			handleTeleportState(delta)
 					
 		PlayerState.LIFTING:
 			print("I am in the LIFTING state")	
@@ -139,7 +114,7 @@ func _physics_process(delta):
 
 			elif isTouchingLadder && (Input.is_action_just_released("up") || Input.is_action_just_released("down") ):
 				velocity.y = 0
-				gravity = 0
+				
 			elif Input.is_action_just_released("up") || !isTouchingLadder:
 				gravity = gravityCONSTANT
 				velocity.y = gravity
@@ -152,10 +127,73 @@ func _physics_process(delta):
 	if !is_on_floor() && !isTouchingLadder:
 		isInAir = true
 		playerstate = PlayerState.AIR
-	else :
+		isTeleporting = false
+	elif(isTeleporting):
+		playerstate = PlayerState.TELEPORTING
+	elif(!isTeleporting):
 		playerstate = PlayerState.WALKING
-
+		#isInAir = false
+		isTeleporting = false
+	if (Input.is_action_pressed("teleport") ):
+		isTeleporting = !isTeleporting
 	
+	
+func handleTeleportState(delta):
+	print("I am in the TELEPORTING state")
+	if(!isTeleporting):
+		playerstate = PlayerState.WALKING
+		return
+			
+	if teleport_timer > 0 :
+		teleport_timer -= delta
+		
+	if Input.is_action_just_pressed("teleport") : # && teleport_timer <= 0
+		isTeleporting = false
+		playerstate = PlayerState.WALKING
+		try_teleport()
+		return
+			
+	if isTeleporting:
+		
+		var teleportDirection = Vector2.ZERO
+		var last_position = Vector2.ZERO
+			
+		if Input.is_action_pressed("ui_right"):
+			print("teleport right")
+			teleportDirection.x += 1
+			if teleportDirection != Vector2.ZERO:
+				print("Moving telePort")
+				teleportDirection = teleportDirection.normalized()
+				show_outline(teleportDirection)
+				last_position = teleportDirection
+		elif Input.is_action_pressed("ui_left"):
+			teleportDirection.x -= 1
+			if teleportDirection != Vector2.ZERO:
+				print("Moving telePort")
+				teleportDirection = teleportDirection.normalized()
+				show_outline(teleportDirection)
+				last_position = teleportDirection
+		elif Input.is_action_pressed("ui_down"):
+			teleportDirection.y += 1
+			if teleportDirection != Vector2.ZERO:
+				print("Moving telePort")
+				teleportDirection = teleportDirection.normalized()
+				show_outline(teleportDirection)
+				last_position = teleportDirection
+		elif Input.is_action_pressed("ui_up"):
+			teleportDirection.y -= 1
+			if teleportDirection != Vector2.ZERO:
+				print("Moving telePort")
+				teleportDirection = teleportDirection.normalized()
+				show_outline(teleportDirection)
+				last_position = teleportDirection
+		elif last_position != Vector2.ZERO:
+				print("Moving telePort")
+				last_position = last_position.normalized()
+				show_outline(last_position)
+		
+
+		
 
 func updateisTouchingLadder(value):
 	print("I am touch ladder")
@@ -181,27 +219,40 @@ func try_teleport():
 	
 	if Input.is_action_pressed("ui_right"):
 			direction.x += 1
+			last_positionTeleport = direction
+			direction = Vector2.ZERO
+			
 	elif Input.is_action_pressed("ui_left"):
 		direction.x -= 1
+		last_positionTeleport = direction
+		direction = Vector2.ZERO
+		
 	elif Input.is_action_pressed("ui_down"):
 		direction.y += 1
+		last_positionTeleport = direction
+		direction = Vector2.ZERO
+		
 	elif Input.is_action_pressed("ui_up"):
 		direction.y -= 1
+		last_positionTeleport = direction
+		direction = Vector2.ZERO
+		
 
-	if direction != Vector2.ZERO:
+	if direction != Vector2.ZERO && last_positionTeleport != Vector2.ZERO:
 		direction = direction.normalized()
-
+		last_positionTeleport = last_positionTeleport.normalized()
+	
 	var player_size = get_player_size()
 	var teleport_distance = player_size * 2
-	var new_position = global_position + direction * teleport_distance
+	var new_position = global_position + last_positionTeleport * teleport_distance
 	
-	if is_position_clear(new_position, player_size):
+	#if is_position_clear(new_position, player_size):
 		
 		#await(get_tree().create_timer(5000))
 		#isTeleporting = false
-		if(Input.is_action_just_released("teleport")): 
-			teleport(new_position)
-			print("I should have teleported")
+		
+	teleport(new_position)
+	print("I should have teleported")
 
 func get_player_size() -> float:
 	if collision_shape.shape is RectangleShape2D:
