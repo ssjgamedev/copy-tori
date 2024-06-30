@@ -10,6 +10,7 @@ var playerstate = PlayerState.WALKING
 @export var teleport_cooldown : float = 2.0
 var teleport_timer : float = 0.0
 @onready var collision_shape = $CollisionShape2D
+@onready var OutlineArea2D = $OutlineSprite/Area2D
 
 
 
@@ -61,8 +62,10 @@ func _physics_process(delta):
 	
 func toggle_teleportState():
 	if playerstate == PlayerState.WALKING :
+		OutlineArea2D.monitoring = true
 		playerstate = PlayerState.TELEPORTING
 	else:
+		OutlineArea2D.monitoring = false
 		playerstate = PlayerState.WALKING
 		
 		
