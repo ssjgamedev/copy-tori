@@ -12,6 +12,7 @@ var gravity = 100
 @onready var player = $"../Player"
 
 
+
 func _ready():
 	
 	pass

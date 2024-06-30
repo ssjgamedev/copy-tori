@@ -12,6 +12,7 @@ var teleport_timer : float = 0.0
 @onready var collision_shape = $CollisionShape2D
 
 
+
 const SPEED = 50
 const LadderSpeed = -50
 const JUMP_VELOCITY = -300
@@ -25,6 +26,7 @@ var facingLeft = false
 var isInAir = false
 var isTeleporting = false
 var lastInputDirection = Vector2.ZERO
+var isTeleportPositionClear = true
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = gravityCONSTANT #ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -172,6 +174,7 @@ func try_teleport():
 		print("I should have teleported")
 		playerstate = PlayerState.WALKING
 	else:
+		
 		print("I am not clear")
 		playerstate = PlayerState.WALKING
 
@@ -185,34 +188,8 @@ func get_player_size() -> float:
 	return 8 * 2		#tiles are 8 pixels long for now
 
 func is_position_clear(position: Vector2, size: float) -> bool:
-	var shape = RectangleShape2D.new()
-	shape.extents = Vector2(size, size) / 2
-
-	var collision_shape = CollisionShape2D.new()
-	collision_shape.shape = shape
-
-	var area = Area2D.new()
-	area.add_child(collision_shape)
-
-	add_child(area)
-	area.global_position = position
-
-	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_shape(shape, 32)
-
-	var is_clear = result.size() == 0
-
-	# Check collision with tilemap
-	var tilemap_collision = area.get_overlapping_areas()
-	for tilemap_area in tilemap_collision:
-		if tilemap_area.is_in_group("tilemap"):
-			print("Colliding with tilemap")
-			is_clear = false
-			break
-
-	remove_child(area)
-
-	return is_clear
+	return isTeleportPositionClear
+	
 
 
 func show_outline(direction : Vector2):
@@ -251,3 +228,11 @@ func updateLastInputDirection():
 		lastInputDirection.y -= 1
 
 	lastInputDirection = lastInputDirection.normalized()
+
+
+func _on_area_2d_body_entered(body):
+	isTeleportPositionClear = false
+
+
+func _on_area_2d_body_exited(body):
+	isTeleportPositionClear = true

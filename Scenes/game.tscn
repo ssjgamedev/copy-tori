@@ -518,4 +518,4 @@ position = Vector2(-230, -217)
 position = Vector2(11, -93)
 
 [node name="Block" parent="." instance=ExtResource("9_b34ea")]
-position = Vector2(-99, -200)
+position = Vector2(-44, -104)

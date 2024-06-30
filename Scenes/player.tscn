@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://coktvmnnb5q1k"]
+[gd_scene load_steps=12 format=3 uid="uid://coktvmnnb5q1k"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_g18ie"]
 [ext_resource type="Texture2D" uid="uid://dvwn7rm452eln" path="res://assets/sprites/knight.png" id="1_n8dna"]
@@ -17,6 +17,9 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pc45x"]
+size = Vector2(12, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3sj4k"]
 atlas = ExtResource("1_n8dna")
@@ -62,8 +65,15 @@ collision_mask = 127
 script = ExtResource("1_g18ie")
 
 [node name="OutlineSprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(25, 0)
+position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_odfnu")
+
+[node name="Area2D" type="Area2D" parent="OutlineSprite"]
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutlineSprite/Area2D"]
+position = Vector2(-1, 5)
+shape = SubResource("RectangleShape2D_pc45x")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 5
@@ -84,3 +94,6 @@ position = Vector2(13, 3)
 
 [node name="Marker2" type="Node2D" parent="."]
 position = Vector2(-13, 4)
+
+[connection signal="body_entered" from="OutlineSprite/Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="OutlineSprite/Area2D" to="." method="_on_area_2d_body_exited"]
