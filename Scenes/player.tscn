@@ -65,6 +65,7 @@ collision_mask = 127
 script = ExtResource("1_g18ie")
 
 [node name="OutlineSprite" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_odfnu")
 
@@ -82,6 +83,7 @@ autoplay = "default"
 frame_progress = 0.0565838
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 z_index = 1
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_told1")
@@ -90,9 +92,11 @@ shape = SubResource("CircleShape2D_told1")
 position = Vector2(16, 4)
 
 [node name="Marker" type="Node2D" parent="."]
+visible = false
 position = Vector2(13, 3)
 
 [node name="Marker2" type="Node2D" parent="."]
+visible = false
 position = Vector2(-13, 4)
 
 [connection signal="body_entered" from="OutlineSprite/Area2D" to="." method="_on_area_2d_body_entered"]

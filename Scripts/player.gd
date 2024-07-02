@@ -2,7 +2,7 @@ class_name Player
 
 extends CharacterBody2D
 
-enum PlayerState {WALKING, AIR, TELEPORTING, LIFTING, FLYING, CLIMBING}
+
 
 var playerstate = PlayerState.WALKING
 
@@ -114,7 +114,7 @@ func handleWalkingState():
 	if Input.is_action_pressed("ui_left") && !facingLeft && !Input.is_action_pressed("ui_right"):
 				#animatedSprite.flip_h = true
 		facingLeft = true
-		scale.x *= -1
+		scale.x = -1
 	elif Input.is_action_pressed("ui_right") && facingLeft && !Input.is_action_pressed("ui_left") :
 				#animatedSprite.flip_h = false
 		facingLeft = false
