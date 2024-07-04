@@ -17,7 +17,7 @@ var teleport_timer : float = 0.0
 const SPEED = 50
 const LadderSpeed = -50
 const JUMP_VELOCITY = -300
-const gravityCONSTANT = 40
+const gravityCONSTANT = 50
 @onready var animatedSprite = $AnimatedSprite2D
 var isTouchingLadder = false
 var Bullet = preload("res://Scenes/Bullet.tscn")
@@ -44,7 +44,7 @@ func _physics_process(delta):
 		PlayerState.AIR:
 			print("I am in the AIR state")
 			
-			velocity.y += 40 * delta
+			velocity.y += gravityCONSTANT * delta
 			velocity.x = 0
 			move_and_slide()
 			print(gravity)
@@ -84,7 +84,7 @@ func handleInput():
 func handleWalkingState():
 	print("I am in the WALKING state")
 	outlineSprite.hide()
-			
+	
 	if isTouchingLadder && Input.is_action_pressed("up"):
 				
 		velocity.y = LadderSpeed
@@ -95,19 +95,15 @@ func handleWalkingState():
 
 	elif isTouchingLadder && (Input.is_action_just_released("up") || Input.is_action_just_released("down") ):
 		velocity.y = 0
-		gravity = 0
+		
 	elif Input.is_action_just_released("up") || !isTouchingLadder:
 		gravity = gravityCONSTANT
-		velocity.y = gravity
+		velocity.y = gravityCONSTANT
 				
 	elif isTouchingLadder && Input.is_action_just_pressed("down"):
 
-		velocity.y = gravity
+		velocity.y = gravityCONSTANT
 				
-			# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
 			# Get the input direction and handle the movement/deceleration.
 			# As good practice, you should replace UI actions with custom gameplay actions.q
 	direction = Input.get_axis("ui_left", "ui_right")
@@ -136,7 +132,7 @@ func handleTeleportState(delta):
 	print("I am in the TELEPORTING state")
 	outlineSprite.show()
 	#if teleport_timer > 0 :
-		###return
+		###retur
 		
 	if Input.is_action_just_pressed("confirm_teleport"):
 		try_teleport()

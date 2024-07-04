@@ -26,23 +26,23 @@ func _process(delta):
 	raycastRight.force_raycast_update()
 	raycastDownCenter.force_raycast_update()
 	
-	if (!raycastDownLeft.is_colliding() && !raycastDownRight.is_colliding() && !raycastLeft.is_colliding() && !raycastRight.is_colliding() || !raycastDownCenter.is_colliding() ):
-		isInAir = true
-		position.y += direction * speed * delta
-	
-	if !isInAir && !isFrozen:
-		if (!raycastDownLeft.is_colliding() || !raycastDownRight.is_colliding() || raycastLeft.is_colliding() || raycastRight.is_colliding()):
-			direction *= -1
-		if direction < 0:
-			animated_sprite_2d.flip_h = true
-		else:
-			animated_sprite_2d.flip_h = false
-		
+	isInAir = !raycastDownCenter.is_colliding()
+	if isInAir:
+		position.y += speed * delta	
+	else:
+		if not isFrozen:
+			if (!raycastDownLeft.is_colliding() || !raycastDownRight.is_colliding()):
+				direction *= -1
+			if (raycastLeft.is_colliding() || raycastRight.is_colliding()):
+				direction *= -1
+			if direction < 0:
+				animated_sprite_2d.flip_h = true
+			else:
+				animated_sprite_2d.flip_h = false
+
 		position.x += direction * speed * delta
-	if(raycastDownCenter.is_colliding()):
-		isInAir = false
-		position.y = position.y
-	if(isFrozen):
+
+	if isFrozen:
 		position.x = position.x
 	
 	
