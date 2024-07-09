@@ -11,9 +11,20 @@ var playerstate = PlayerState.WALKING
 var teleport_timer : float = 0.0
 @onready var collision_shape = $CollisionShape2D
 @onready var OutlineArea2D = $OutlineSprite/Area2D
+@onready var ray_cast_down = $RayCastDown
+@onready var ray_cast_left = $RayCastLeft
+@onready var ray_cast_right = $RayCastRight
+@onready var ray_cast_up = $RayCastUp
+@onready var ray_cast_right_2 = $RayCastRight2
+@onready var ray_cast_left_2 = $RayCastLeft2
+@onready var ray_cast_up_2 = $RayCastUp2
+@onready var ray_cast_down_2 = $RayCastDown2
+@onready var ray_cast_up_3 = $RayCastUp3
+@onready var ray_cast_up_4 = $RayCastUp4
 
 
 
+const HALF_BLOCK_SIZE = 8
 const SPEED = 50
 const LadderSpeed = -50
 const JUMP_VELOCITY = -300
@@ -28,7 +39,7 @@ var isInAir = false
 var isTeleporting = false
 var lastInputDirection = Vector2.ZERO
 var isTeleportPositionClear = true
-
+var isFlyingUpClear = false
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = gravityCONSTANT #ProjectSettings.get_setting("physics/2d/default_gravity")
 func _ready():
@@ -55,7 +66,7 @@ func _physics_process(delta):
 		PlayerState.LIFTING:
 			print("I am in the LIFTING state")	
 		PlayerState.FLYING:
-			print("I am in the FLYING state")
+			handleFlyingState(delta)
 		PlayerState.CLIMBING:
 			print("I am in the CLIMBING state")
 	
@@ -73,7 +84,7 @@ func handleInput():
 	if !isTouchingLadder && !is_on_floor():
 		playerstate = PlayerState.AIR
 	elif(!isTeleporting):
-		playerstate = PlayerState.WALKING
+		playerstate = PlayerState.FLYING
 	if Input.is_action_just_pressed("teleport"):
 		isTeleporting = true
 		toggle_teleportState()
@@ -147,7 +158,29 @@ func updateisTouchingLadder(value):
 func updateLadderPhysics():
 	velocity.y = 0
 	gravity = 0
+func handleFlyingState(delta):
+	print("I am in the flying State")
+	var flydirection = Vector2.ZERO
 	
+	
+	if(ray_cast_right.is_colliding()):
+		print("i really should not be moving")
+	if Input.is_action_just_pressed("ui_up") && isFlyingUpClear:
+		flydirection.y -= 1
+	elif Input.is_action_just_pressed("ui_down") && !ray_cast_down.is_colliding() && !ray_cast_down_2.is_colliding():
+		flydirection.y += 1
+	elif Input.is_action_just_pressed("ui_left") && (!ray_cast_left.is_colliding() && !ray_cast_left_2.is_colliding()):
+		flydirection.x -= 1
+	elif Input.is_action_just_pressed("ui_right") && (!ray_cast_right.is_colliding() && !ray_cast_right_2.is_colliding()):
+		flydirection.x += 1
+		print("i should not be here")
+	
+	if flydirection != Vector2.ZERO:
+		flydirection = flydirection.normalized() * HALF_BLOCK_SIZE
+		position = position + flydirection
+	
+func isCleartoFly():
+	pass
 	
 func shoot():
 	var bulletProjectile = Bullet.instantiate()
@@ -235,3 +268,11 @@ func _on_area_2d_body_entered(body):
 
 func _on_area_2d_body_exited(body):
 	isTeleportPositionClear = true
+
+
+func _on_flying_checker_body_entered(body):
+	isFlyingUpClear = false
+
+
+func _on_flying_checker_body_exited(body):
+	isFlyingUpClear = true

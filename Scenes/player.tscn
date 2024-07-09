@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://coktvmnnb5q1k"]
+[gd_scene load_steps=13 format=3 uid="uid://coktvmnnb5q1k"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_g18ie"]
 [ext_resource type="Texture2D" uid="uid://dvwn7rm452eln" path="res://assets/sprites/knight.png" id="1_n8dna"]
@@ -60,19 +60,21 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_told1"]
 radius = 7.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vn65v"]
+size = Vector2(12, 5)
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 127
 script = ExtResource("1_g18ie")
 
 [node name="OutlineSprite" type="AnimatedSprite2D" parent="."]
-visible = false
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_odfnu")
 
-[node name="Area2D" type="Area2D" parent="OutlineSprite"]
+[node name="TeleportCheckerArea2D" type="Area2D" parent="OutlineSprite"]
 collision_mask = 28
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OutlineSprite/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OutlineSprite/TeleportCheckerArea2D"]
 position = Vector2(-1, 5)
 shape = SubResource("RectangleShape2D_pc45x")
 
@@ -99,5 +101,44 @@ position = Vector2(13, 3)
 visible = false
 position = Vector2(-13, 4)
 
-[connection signal="body_entered" from="OutlineSprite/Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="body_exited" from="OutlineSprite/Area2D" to="." method="_on_area_2d_body_exited"]
+[node name="RayCastDown" type="RayCast2D" parent="."]
+position = Vector2(3, 0)
+target_position = Vector2(0, 15)
+collision_mask = 24
+
+[node name="RayCastDown2" type="RayCast2D" parent="."]
+position = Vector2(-3, 0)
+target_position = Vector2(0, 15)
+collision_mask = 24
+
+[node name="RayCastLeft" type="RayCast2D" parent="."]
+position = Vector2(-4, 0)
+target_position = Vector2(-7, 0)
+collision_mask = 24
+
+[node name="RayCastLeft2" type="RayCast2D" parent="."]
+position = Vector2(-4, 8)
+target_position = Vector2(-6, 0)
+collision_mask = 24
+
+[node name="RayCastRight" type="RayCast2D" parent="."]
+position = Vector2(4, 0)
+target_position = Vector2(8, 0)
+collision_mask = 24
+
+[node name="RayCastRight2" type="RayCast2D" parent="."]
+position = Vector2(4, 8)
+target_position = Vector2(8, 0)
+collision_mask = 24
+
+[node name="flyingChecker" type="Area2D" parent="."]
+collision_mask = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="flyingChecker"]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_vn65v")
+
+[connection signal="body_entered" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="flyingChecker" to="." method="_on_flying_checker_body_entered"]
+[connection signal="body_exited" from="flyingChecker" to="." method="_on_flying_checker_body_exited"]

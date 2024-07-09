@@ -28,7 +28,10 @@ func _process(delta):
 	
 	isInAir = !raycastDownCenter.is_colliding()
 	if isInAir:
-		position.y += speed * delta	
+		position.y += speed * delta
+	elif isFrozen:
+		print("I am frozen")
+		position.x = position.x	
 	else:
 		if not isFrozen:
 			if (!raycastDownLeft.is_colliding() || !raycastDownRight.is_colliding()):
@@ -42,8 +45,8 @@ func _process(delta):
 
 		position.x += direction * speed * delta
 
-	if isFrozen:
-		position.x = position.x
+	
+		
 	
 	
 func hit():
