@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://coktvmnnb5q1k"]
+[gd_scene load_steps=14 format=3 uid="uid://coktvmnnb5q1k"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_g18ie"]
 [ext_resource type="Texture2D" uid="uid://dvwn7rm452eln" path="res://assets/sprites/knight.png" id="1_n8dna"]
@@ -63,6 +63,9 @@ radius = 7.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vn65v"]
 size = Vector2(12, 5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6sicd"]
+size = Vector2(6, 14)
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 127
 script = ExtResource("1_g18ie")
@@ -85,7 +88,6 @@ autoplay = "default"
 frame_progress = 0.0565838
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 z_index = 1
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_told1")
@@ -94,12 +96,10 @@ shape = SubResource("CircleShape2D_told1")
 position = Vector2(16, 4)
 
 [node name="Marker" type="Node2D" parent="."]
-visible = false
 position = Vector2(13, 3)
 
 [node name="Marker2" type="Node2D" parent="."]
-visible = false
-position = Vector2(-13, 4)
+position = Vector2(5, 12)
 
 [node name="RayCastDown" type="RayCast2D" parent="."]
 position = Vector2(3, 0)
@@ -138,7 +138,16 @@ collision_mask = 24
 position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_vn65v")
 
+[node name="ShootingSpace" type="Area2D" parent="."]
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShootingSpace"]
+position = Vector2(16, 5)
+shape = SubResource("RectangleShape2D_6sicd")
+
 [connection signal="body_entered" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="flyingChecker" to="." method="_on_flying_checker_body_entered"]
 [connection signal="body_exited" from="flyingChecker" to="." method="_on_flying_checker_body_exited"]
+[connection signal="body_entered" from="ShootingSpace" to="." method="_on_shooting_space_body_entered"]
+[connection signal="body_exited" from="ShootingSpace" to="." method="_on_shooting_space_body_exited"]

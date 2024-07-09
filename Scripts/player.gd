@@ -10,7 +10,7 @@ var playerstate = PlayerState.WALKING
 @export var teleport_cooldown : float = 2.0
 var teleport_timer : float = 0.0
 @onready var collision_shape = $CollisionShape2D
-@onready var OutlineArea2D = $OutlineSprite/Area2D
+@onready var OutlineArea2D = $OutlineSprite/TeleportCheckerArea2D
 @onready var ray_cast_down = $RayCastDown
 @onready var ray_cast_left = $RayCastLeft
 @onready var ray_cast_right = $RayCastRight
@@ -40,6 +40,7 @@ var isTeleporting = false
 var lastInputDirection = Vector2.ZERO
 var isTeleportPositionClear = true
 var isFlyingUpClear = false
+var isCleartoShoot = true
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = gravityCONSTANT #ProjectSettings.get_setting("physics/2d/default_gravity")
 func _ready():
@@ -84,11 +85,14 @@ func handleInput():
 	if !isTouchingLadder && !is_on_floor():
 		playerstate = PlayerState.AIR
 	elif(!isTeleporting):
-		playerstate = PlayerState.FLYING
+		playerstate = PlayerState.WALKING
 	if Input.is_action_just_pressed("teleport"):
 		isTeleporting = true
 		toggle_teleportState()
 		print("input")
+		
+	if(Input.is_action_just_pressed("buildBridge")):
+		spawnPlatform()
 		
 	updateLastInputDirection()
 		
@@ -163,8 +167,7 @@ func handleFlyingState(delta):
 	var flydirection = Vector2.ZERO
 	
 	
-	if(ray_cast_right.is_colliding()):
-		print("i really should not be moving")
+	
 	if Input.is_action_just_pressed("ui_up") && isFlyingUpClear:
 		flydirection.y -= 1
 	elif Input.is_action_just_pressed("ui_down") && !ray_cast_down.is_colliding() && !ray_cast_down_2.is_colliding():
@@ -173,7 +176,6 @@ func handleFlyingState(delta):
 		flydirection.x -= 1
 	elif Input.is_action_just_pressed("ui_right") && (!ray_cast_right.is_colliding() && !ray_cast_right_2.is_colliding()):
 		flydirection.x += 1
-		print("i should not be here")
 	
 	if flydirection != Vector2.ZERO:
 		flydirection = flydirection.normalized() * HALF_BLOCK_SIZE
@@ -183,6 +185,8 @@ func isCleartoFly():
 	pass
 	
 func shoot():
+	if !isCleartoShoot:
+		return
 	var bulletProjectile = Bullet.instantiate()
 	if facingLeft:
 
@@ -191,7 +195,13 @@ func shoot():
 	#else:
 	bulletProjectile.start($Marker.global_position, rotation)
 	get_tree().root.add_child(bulletProjectile)
+
+func spawnPlatform():
 	
+	var platform = bridge.new()
+	platform.position = $Marker2.global_position
+	print(platform)
+	get_tree().root.add_child(platform)
 func try_teleport():
 	
 	
@@ -262,6 +272,7 @@ func updateLastInputDirection():
 	lastInputDirection = lastInputDirection.normalized()
 
 
+
 func _on_area_2d_body_entered(body):
 	isTeleportPositionClear = false
 
@@ -276,3 +287,10 @@ func _on_flying_checker_body_entered(body):
 
 func _on_flying_checker_body_exited(body):
 	isFlyingUpClear = true
+
+
+func _on_shooting_space_body_entered(body):
+	isCleartoShoot = false #for weird bug that pushes block
+
+func _on_shooting_space_body_exited(body):
+	isCleartoShoot = true 
