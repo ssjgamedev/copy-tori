@@ -30,7 +30,6 @@ func _process(delta):
 	if isInAir:
 		position.y += speed * delta
 	elif isFrozen:
-		print("I am frozen")
 		position.x = position.x	
 	else:
 		if not isFrozen:
@@ -63,6 +62,7 @@ func _on_area_2d_body_entered(body):
 		body.queue_free()# release the bullet
 	if body is Player:
 		print("I hit Player")
-		#body.queue_free()
+		var gameManager = get_node("/root/Game/GameManager")
+		gameManager.isDead = true
 	if body is Block:
 		direction *= -1

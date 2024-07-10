@@ -22,6 +22,8 @@ var teleport_timer : float = 0.0
 @onready var ray_cast_up_3 = $RayCastUp3
 @onready var ray_cast_up_4 = $RayCastUp4
 
+@onready var bridge = preload("res://Scenes/platform_bridge.tscn")
+
 
 
 const HALF_BLOCK_SIZE = 8
@@ -41,6 +43,8 @@ var lastInputDirection = Vector2.ZERO
 var isTeleportPositionClear = true
 var isFlyingUpClear = false
 var isCleartoShoot = true
+var bridgeTrackingArray: Array [StaticBody2D] = []
+var isClearToSpawnBridge = true
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = gravityCONSTANT #ProjectSettings.get_setting("physics/2d/default_gravity")
 func _ready():
@@ -82,17 +86,19 @@ func toggle_teleportState():
 		
 		
 func handleInput():
-	if !isTouchingLadder && !is_on_floor():
-		playerstate = PlayerState.AIR
-	elif(!isTeleporting):
-		playerstate = PlayerState.WALKING
 	if Input.is_action_just_pressed("teleport"):
 		isTeleporting = true
 		toggle_teleportState()
 		print("input")
+	if !isTouchingLadder && !is_on_floor():
+		playerstate = PlayerState.AIR
+	elif(!isTeleporting):
+		playerstate = PlayerState.WALKING
+	
+	
 		
 	if(Input.is_action_just_pressed("buildBridge")):
-		spawnPlatform()
+		spawnBridge()
 		
 	updateLastInputDirection()
 		
@@ -196,12 +202,21 @@ func shoot():
 	bulletProjectile.start($Marker.global_position, rotation)
 	get_tree().root.add_child(bulletProjectile)
 
-func spawnPlatform():
+func spawnBridge():
+	if !isClearToSpawnBridge:
+		return
+	var newBridge = bridge.instantiate()
+	var tileMap = get_node("/root/Game/TileMap")
+	var tilePosition = tileMap.local_to_map($Marker2.global_position)
+	var localPosition = tileMap.map_to_local(tilePosition) + Vector2(5,0)
+	newBridge.position = localPosition
+	get_tree().root.add_child(newBridge)
+	bridgeTrackingArray.append(newBridge)
 	
-	var platform = bridge.new()
-	platform.position = $Marker2.global_position
-	print(platform)
-	get_tree().root.add_child(platform)
+func clearBridges():
+	for bridges in bridgeTrackingArray:
+		bridges.queue_free()
+	bridgeTrackingArray.clear()
 func try_teleport():
 	
 	
@@ -271,7 +286,8 @@ func updateLastInputDirection():
 
 	lastInputDirection = lastInputDirection.normalized()
 
-
+func _on_scene_reload():
+	clearBridges()
 
 func _on_area_2d_body_entered(body):
 	isTeleportPositionClear = false
@@ -294,3 +310,11 @@ func _on_shooting_space_body_entered(body):
 
 func _on_shooting_space_body_exited(body):
 	isCleartoShoot = true 
+
+
+func _on_platform_spawn_area_body_entered(body):
+	isClearToSpawnBridge = false
+
+
+func _on_platform_spawn_area_body_exited(body):
+	isClearToSpawnBridge = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ddwo6kc6y3pa"]
+[gd_scene load_steps=15 format=3 uid="uid://ddwo6kc6y3pa"]
 
 [ext_resource type="Texture2D" uid="uid://csiesswfxirq2" path="res://assets/sprites/world_tileset.png" id="1_oyau1"]
 [ext_resource type="Script" path="res://Scripts/TileMap.gd" id="2_ef8tj"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://duquj3jxbykvj" path="res://Scenes/killzone.tscn" id="6_jdigr"]
 [ext_resource type="PackedScene" uid="uid://eutxfheqa52d" path="res://Scenes/Ladder.tscn" id="7_3frhc"]
 [ext_resource type="PackedScene" uid="uid://chun6u87shq3h" path="res://Scenes/ladderTop.tscn" id="8_adwkj"]
-[ext_resource type="PackedScene" uid="uid://dxnioaaamfhr2" path="res://Scenes/enemy.tscn" id="9_li0fm"]
 [ext_resource type="PackedScene" uid="uid://xkt862px5ork" path="res://Scenes/block.tscn" id="10_gh4u5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7nm34"]
@@ -524,12 +523,6 @@ position = Vector2(-131, -187)
 
 [node name="LadderTop2" parent="." instance=ExtResource("8_adwkj")]
 position = Vector2(29, 5)
-
-[node name="Enemy" parent="." instance=ExtResource("9_li0fm")]
-position = Vector2(-230, -217)
-
-[node name="Enemy2" parent="." instance=ExtResource("9_li0fm")]
-position = Vector2(11, -93)
 
 [node name="Block" parent="." instance=ExtResource("10_gh4u5")]
 position = Vector2(-99, -201)

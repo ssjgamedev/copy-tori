@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://coktvmnnb5q1k"]
+[gd_scene load_steps=15 format=3 uid="uid://coktvmnnb5q1k"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_g18ie"]
 [ext_resource type="Texture2D" uid="uid://dvwn7rm452eln" path="res://assets/sprites/knight.png" id="1_n8dna"]
@@ -66,6 +66,9 @@ size = Vector2(12, 5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6sicd"]
 size = Vector2(6, 14)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_du73i"]
+size = Vector2(11, 9)
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 127
 script = ExtResource("1_g18ie")
@@ -99,7 +102,7 @@ position = Vector2(16, 4)
 position = Vector2(13, 3)
 
 [node name="Marker2" type="Node2D" parent="."]
-position = Vector2(5, 12)
+position = Vector2(6, 13)
 
 [node name="RayCastDown" type="RayCast2D" parent="."]
 position = Vector2(3, 0)
@@ -145,9 +148,19 @@ collision_mask = 8
 position = Vector2(16, 5)
 shape = SubResource("RectangleShape2D_6sicd")
 
+[node name="PlatformSpawnArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformSpawnArea"]
+position = Vector2(13.5, 16.5)
+shape = SubResource("RectangleShape2D_du73i")
+
 [connection signal="body_entered" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="flyingChecker" to="." method="_on_flying_checker_body_entered"]
 [connection signal="body_exited" from="flyingChecker" to="." method="_on_flying_checker_body_exited"]
 [connection signal="body_entered" from="ShootingSpace" to="." method="_on_shooting_space_body_entered"]
 [connection signal="body_exited" from="ShootingSpace" to="." method="_on_shooting_space_body_exited"]
+[connection signal="body_entered" from="PlatformSpawnArea" to="." method="_on_platform_spawn_area_body_entered"]
+[connection signal="body_exited" from="PlatformSpawnArea" to="." method="_on_platform_spawn_area_body_exited"]
