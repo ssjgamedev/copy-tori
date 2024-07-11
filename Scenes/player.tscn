@@ -158,14 +158,15 @@ position = Vector2(13, 17)
 shape = SubResource("RectangleShape2D_du73i")
 
 [node name="RayCast2DBridgeChecker" type="RayCast2D" parent="."]
-position = Vector2(9, 8)
+position = Vector2(8, 8)
 target_position = Vector2(0, 7)
 collision_mask = 24
 
-[node name="RayCast2DBridgeChecker2" type="RayCast2D" parent="."]
-position = Vector2(21, 8)
-target_position = Vector2(0, 7)
-collision_mask = 24
+[node name="BackTileBridgeMarker" type="Node2D" parent="."]
+position = Vector2(-13, 15)
+
+[node name="FrontTileBridgeMarker2" type="Node2D" parent="."]
+position = Vector2(28, 15)
 
 [connection signal="body_entered" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="OutlineSprite/TeleportCheckerArea2D" to="." method="_on_area_2d_body_exited"]

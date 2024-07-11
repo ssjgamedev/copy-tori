@@ -3,7 +3,10 @@ class_name Player
 extends CharacterBody2D
 
 
-@onready var ray_cast_2d_bridge_checker_2 = $RayCast2DBridgeChecker2
+@onready var backTileBridgeMarker = $BackTileBridgeMarker
+@onready var frontTileBridgeMarker = $FrontTileBridgeMarker2
+
+
 
 var playerstate = PlayerState.WALKING
 @onready var bridgeRaycast = $RayCast2DBridgeChecker
@@ -212,10 +215,15 @@ func spawnBridge():
 	var tileMap = get_node("/root/Game/TileMap")
 	var tilePosition = tileMap.local_to_map(bridgeRaycast.global_position - Vector2(0,-17))
 	var localPosition = tileMap.map_to_local(tilePosition) + Vector2(5,0)
-	var nextTileOverPosition = tileMap.local_to_map(ray_cast_2d_bridge_checker_2.global_position - Vector2(0,-17))
+	var nextTileOverPosition = tileMap.local_to_map(frontTileBridgeMarker.global_position + Vector2(0,-17))
 	var nextLocalPosition = tileMap.map_to_local(nextTileOverPosition) + Vector2(5,0)
+	var backTilePosition = tileMap.local_to_map(backTileBridgeMarker.global_position - Vector2(0,-17))
+	var backTileLocalPosition = tileMap.map_to_local(backTilePosition) + Vector2(5,0)
 	newBridge.position = localPosition
-	if tilePosition == nextTileOverPosition:
+	print("Fronttilemarker position is:" + str(nextTileOverPosition) + str(nextLocalPosition))
+	print("tilemarker position is:" + str(tilePosition) + str(localPosition))
+	print("Backtilemarker position is:" + str (backTilePosition) + str(backTileLocalPosition))
+	if (tilePosition.x - backTilePosition.x) > 1:
 		print("it is working")
 		newBridge.position = localPosition + Vector2(-16,0)
 	else:
