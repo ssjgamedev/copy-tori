@@ -3,9 +3,10 @@ class_name Player
 extends CharacterBody2D
 
 
+@onready var ray_cast_2d_bridge_checker_2 = $RayCast2DBridgeChecker2
 
 var playerstate = PlayerState.WALKING
-
+@onready var bridgeRaycast = $RayCast2DBridgeChecker
 @onready var outlineSprite = $OutlineSprite
 @export var teleport_cooldown : float = 2.0
 var teleport_timer : float = 0.0
@@ -203,13 +204,23 @@ func shoot():
 	get_tree().root.add_child(bulletProjectile)
 
 func spawnBridge():
-	if !isClearToSpawnBridge:
+	bridgeRaycast.force_raycast_update()
+	if bridgeRaycast.is_colliding():
+		print("didn't spawn")
 		return
 	var newBridge = bridge.instantiate()
 	var tileMap = get_node("/root/Game/TileMap")
-	var tilePosition = tileMap.local_to_map($Marker2.global_position)
+	var tilePosition = tileMap.local_to_map(bridgeRaycast.global_position - Vector2(0,-17))
 	var localPosition = tileMap.map_to_local(tilePosition) + Vector2(5,0)
+	var nextTileOverPosition = tileMap.local_to_map(ray_cast_2d_bridge_checker_2.global_position - Vector2(0,-17))
+	var nextLocalPosition = tileMap.map_to_local(nextTileOverPosition) + Vector2(5,0)
 	newBridge.position = localPosition
+	if tilePosition == nextTileOverPosition:
+		print("it is working")
+		newBridge.position = localPosition + Vector2(-16,0)
+	else:
+		newBridge.position = localPosition 
+	
 	get_tree().root.add_child(newBridge)
 	bridgeTrackingArray.append(newBridge)
 	
