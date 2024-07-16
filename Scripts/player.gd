@@ -62,7 +62,7 @@ func _physics_process(delta):
 		PlayerState.WALKING:
 			handleWalkingState()
 		PlayerState.AIR:
-			print("I am in the AIR state")
+			#print("I am in the AIR state")
 			
 			velocity.y += gravityCONSTANT * delta
 			velocity.x = 0
@@ -101,13 +101,13 @@ func handleInput():
 	
 	
 		
-	if(Input.is_action_just_pressed("buildBridge")):
+	if(Input.is_action_just_pressed("buildBridge") && playerstate == PlayerState.WALKING):
 		spawnBridge()
 		
 	updateLastInputDirection()
 		
 func handleWalkingState():
-	print("I am in the WALKING state")
+	#print("I am in the WALKING state")
 	outlineSprite.hide()
 	
 	if isTouchingLadder && Input.is_action_pressed("up"):
@@ -154,7 +154,7 @@ func handleWalkingState():
 		
 	
 func handleTeleportState(delta):
-	print("I am in the TELEPORTING state")
+	#print("I am in the TELEPORTING state")
 	outlineSprite.show()
 	#if teleport_timer > 0 :
 		###retur
@@ -208,28 +208,46 @@ func shoot():
 
 func spawnBridge():
 	bridgeRaycast.force_raycast_update()
+	ray_cast_down_2.force_raycast_update()
+	var tileOffset = Vector2(5,0)
+	var offSet = Vector2(0,2)
+	
 	if bridgeRaycast.is_colliding():
 		print("didn't spawn")
 		return
 	var newBridge = bridge.instantiate()
 	var tileMap = get_node("/root/Game/TileMap")
-	var tilePosition = tileMap.local_to_map(bridgeRaycast.global_position - Vector2(0,-17))
-	var localPosition = tileMap.map_to_local(tilePosition) + Vector2(5,0)
-	var nextTileOverPosition = tileMap.local_to_map(frontTileBridgeMarker.global_position + Vector2(0,-17))
-	var nextLocalPosition = tileMap.map_to_local(nextTileOverPosition) + Vector2(5,0)
-	var backTilePosition = tileMap.local_to_map(backTileBridgeMarker.global_position - Vector2(0,-17))
-	var backTileLocalPosition = tileMap.map_to_local(backTilePosition) + Vector2(5,0)
-	newBridge.position = localPosition
-	print("Fronttilemarker position is:" + str(nextTileOverPosition) + str(nextLocalPosition))
-	print("tilemarker position is:" + str(tilePosition) + str(localPosition))
-	print("Backtilemarker position is:" + str (backTilePosition) + str(backTileLocalPosition))
-	if (tilePosition.x - backTilePosition.x) > 1:
-		print("it is working")
-		newBridge.position = localPosition + Vector2(-16,0)
+	var tileBelowPosition
+	print("player position is " + str(tileMap.local_to_map(global_position)))
+	if ray_cast_down_2.is_colliding():
+		var collider = ray_cast_down_2.get_collider()
+		if collider && collider.name == "TileMap":
+			print("hey i collided with " + collider.name)
+			var collisionPoint = ray_cast_down_2.get_collision_point()
+		if facingLeft:
+			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-32,32))
+		else:
+			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-16,32))
+	elif !ray_cast_down_2.is_colliding():
+		var collider = ray_cast_down_2.get_collider()
+		if collider && collider.name == "TileMap":
+			print("hey i collided with  2 " + collider.name)
+			var collisionPoint = ray_cast_down_2.get_collision_point()
+			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-48,32))
+	elif facingLeft:
+		tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-48,32)) 
 	else:
-		newBridge.position = localPosition 
+		tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-16,32)) 
+	if tileBelowPosition == null :
+		print("no spawn for you")
+		return
+	var localPosition = (tileMap.map_to_local(tileBelowPosition))
 	
-	get_tree().root.add_child(newBridge)
+	newBridge.position = localPosition
+	
+	tileMap.add_child(newBridge)
+	
+
 	bridgeTrackingArray.append(newBridge)
 	
 func clearBridges():
