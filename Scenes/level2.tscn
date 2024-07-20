@@ -422,7 +422,7 @@ size = Vector2(16, 94)
 [node name="Game" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
-position = Vector2(5, -16)
+position = Vector2(2.08165e-12, 2.08165e-12)
 tile_set = SubResource("TileSet_iroqr")
 collision_visibility_mode = 1
 format = 2
@@ -445,7 +445,7 @@ layer_2/tile_data = PackedInt32Array(-1769505, 524288, 0, -1703969, 524288, 0, -
 script = ExtResource("2_h7jep")
 
 [node name="Player" parent="." instance=ExtResource("3_xm7o8")]
-position = Vector2(-83, -204)
+position = Vector2(-104, -189)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(3, 3)
@@ -456,10 +456,10 @@ position_smoothing_enabled = true
 [node name="Coins" type="Node" parent="."]
 
 [node name="Coin" parent="Coins" instance=ExtResource("4_o2dnx")]
-position = Vector2(-51, -231)
+position = Vector2(-57, -223)
 
 [node name="Coin2" parent="Coins" instance=ExtResource("4_o2dnx")]
-position = Vector2(45, -248)
+position = Vector2(40, -242)
 
 [node name="GameManager" parent="." instance=ExtResource("5_f23u7")]
 
@@ -472,7 +472,7 @@ shape = SubResource("WorldBoundaryShape2D_ydmoj")
 [node name="Ladders" type="Node" parent="."]
 
 [node name="Ladder2" parent="Ladders" instance=ExtResource("7_rtjut")]
-position = Vector2(-35, -73)
+position = Vector2(-40, -56)
 
 [node name="LadderTop" parent="Ladders/Ladder2" instance=ExtResource("8_xwc3g")]
 position = Vector2(0, -65)
@@ -482,7 +482,7 @@ position = Vector2(0, -29.5)
 shape = SubResource("RectangleShape2D_biqeb")
 
 [node name="Ladder" parent="Ladders" instance=ExtResource("7_rtjut")]
-position = Vector2(-67, -152)
+position = Vector2(-72, -137)
 
 [node name="LadderTop" parent="Ladders/Ladder" instance=ExtResource("8_xwc3g")]
 position = Vector2(0, -35)
@@ -492,7 +492,7 @@ position = Vector2(0.5, -14.5)
 shape = SubResource("RectangleShape2D_qkttt")
 
 [node name="Ladder3" parent="Ladders" instance=ExtResource("7_rtjut")]
-position = Vector2(-3, -154)
+position = Vector2(-7, -138)
 
 [node name="LadderTop2" parent="Ladders/Ladder3" instance=ExtResource("8_xwc3g")]
 position = Vector2(0, -81)

@@ -8,7 +8,7 @@ extends CharacterBody2D
 
 
 
-var playerstate = PlayerState.WALKING
+var playerstate = PlayerState.FLYING
 @onready var bridgeRaycast = $RayCast2DBridgeChecker
 @onready var outlineSprite = $OutlineSprite
 @export var teleport_cooldown : float = 2.0
@@ -45,7 +45,7 @@ var isInAir = false
 var isTeleporting = false
 var lastInputDirection = Vector2.ZERO
 var isTeleportPositionClear = true
-var isFlyingUpClear = false
+var isFlyingUpClear = true
 var isCleartoShoot = true
 var bridgeTrackingArray: Array [StaticBody2D] = []
 var isClearToSpawnBridge = true
@@ -67,7 +67,6 @@ func _physics_process(delta):
 			velocity.y += gravityCONSTANT * delta
 			velocity.x = 0
 			move_and_slide()
-			print(gravity)
 			
 		PlayerState.TELEPORTING:
 			handleTeleportState(delta)
@@ -97,7 +96,7 @@ func handleInput():
 	if !isTouchingLadder && !is_on_floor():
 		playerstate = PlayerState.AIR
 	elif(!isTeleporting):
-		playerstate = PlayerState.WALKING
+		playerstate = PlayerState.FLYING
 	
 	
 		
@@ -109,6 +108,7 @@ func handleInput():
 func handleWalkingState():
 	#print("I am in the WALKING state")
 	outlineSprite.hide()
+	var walkingdirection = Vector2.ZERO
 	
 	if isTouchingLadder && Input.is_action_pressed("up"):
 				
@@ -128,28 +128,33 @@ func handleWalkingState():
 	elif isTouchingLadder && Input.is_action_just_pressed("down"):
 
 		velocity.y = gravityCONSTANT
-				
-			# Get the input direction and handle the movement/deceleration.
-			# As good practice, you should replace UI actions with custom gameplay actions.q
+		
 	direction = Input.get_axis("ui_left", "ui_right")
-	if Input.is_action_pressed("ui_left") && !facingLeft && !Input.is_action_pressed("ui_right"):
+	if Input.is_action_just_pressed("ui_left") && !facingLeft && !Input.is_action_pressed("ui_right"):
 				#animatedSprite.flip_h = true
 		facingLeft = true
 		scale.x = -1
-	elif Input.is_action_pressed("ui_right") && facingLeft && !Input.is_action_pressed("ui_left") :
+		walkingdirection.x = walkingdirection.x - 1
+	elif Input.is_action_just_pressed("ui_right") && facingLeft && !Input.is_action_pressed("ui_left") :
 				#animatedSprite.flip_h = false
 		facingLeft = false
 		scale.x *= -1
+		walkingdirection.x = walkingdirection.x + 1
 	if direction && is_on_floor() || (direction && isTouchingLadder) && !isTeleporting:
-			velocity.x = direction * SPEED
+			#velocity.x = direction * SPEED
+			walkingdirection = walkingdirection.normalized() * HALF_BLOCK_SIZE
+			position.x = position.x  + walkingdirection.x
 				
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+	#else:
+		#velocity.x = move_toward(velocity.x, 0, SPEED)
+		#position.x = position.x
 				
 	if Input.is_action_just_pressed("shoot"):
 		shoot()
 				
-	move_and_slide()
+	#move_and_slide()
+	walkingdirection = walkingdirection.normalized() * HALF_BLOCK_SIZE
+	position.x = position.x  + walkingdirection.x
 		
 		
 	
@@ -178,8 +183,9 @@ func handleFlyingState(delta):
 	
 	
 	
-	if Input.is_action_just_pressed("ui_up") && isFlyingUpClear:
-		flydirection.y -= 1
+	if Input.is_action_just_pressed("up") && isFlyingUpClear:
+		flydirection.y -= 5
+		print("UP")
 	elif Input.is_action_just_pressed("ui_down") && !ray_cast_down.is_colliding() && !ray_cast_down_2.is_colliding():
 		flydirection.y += 1
 	elif Input.is_action_just_pressed("ui_left") && (!ray_cast_left.is_colliding() && !ray_cast_left_2.is_colliding()):
@@ -212,9 +218,9 @@ func spawnBridge():
 	var tileOffset = Vector2(5,0)
 	var offSet = Vector2(0,2)
 	
-	if bridgeRaycast.is_colliding():
-		print("didn't spawn")
-		return
+	#if bridgeRaycast.is_colliding():
+	#	print("didn't spawn")
+	#	return
 	var newBridge = bridge.instantiate()
 	var tileMap = get_node("/root/Game/TileMap")
 	var tileBelowPosition
@@ -225,9 +231,9 @@ func spawnBridge():
 			print("hey i collided with " + collider.name)
 			var collisionPoint = ray_cast_down_2.get_collision_point()
 		if facingLeft:
-			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-32,32))
+			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-16,16))
 		else:
-			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(-16,32))
+			tileBelowPosition = tileMap.local_to_map(global_position + Vector2(16,16))
 	elif !ray_cast_down_2.is_colliding():
 		var collider = ray_cast_down_2.get_collider()
 		if collider && collider.name == "TileMap":

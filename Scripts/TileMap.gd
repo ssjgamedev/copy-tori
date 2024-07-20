@@ -8,9 +8,24 @@ extends TileMap
 var index = 1
 var trapTimer = 0
 func _ready():
-	pass
+	queue_redraw()
+	
+func _draw():
+	var cellSize = Vector2(16,16)
+	var mapSize = Vector2(300,300)
+	
+	for x in range(mapSize.x + 1):
+		var start = Vector2(x * cellSize.x,0)
+		var end = Vector2(x * cellSize.x, mapSize.y * cellSize.y)
+		draw_line(start,end,Color(1,0,0))
+		
+	for y in range(mapSize.y + 1):
+		var start = Vector2(0,y * cellSize.y)
+		var end = Vector2(mapSize.x * cellSize.x,y * cellSize.y)
+		draw_line(start,end,Color(1,0,0))
 	
 func _process(delta):
+	queue_redraw()
 	if Input.is_action_just_pressed("ui_accept"):
 		setTrap()
 	trapTimer += delta
@@ -25,7 +40,7 @@ func remove_specific_tile(atlas_coords: Vector2i):
 func setTrap():
 	print(tile_map.get_layer_name(1))
 
-	var playersGlobalPosition = player.global_position
+	var playersGlobalPosition = player.global_position#.get_child(0).global_position
 	
 	var cellPosition = tile_map.local_to_map(playersGlobalPosition)
 	
@@ -61,3 +76,9 @@ func setTrap():
 func _notification(what):
 	if (what == NOTIFICATION_PREDELETE):
 		print("I am Free")
+		
+func getCellSize():
+	return get_used_rect().size
+	
+
+

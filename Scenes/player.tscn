@@ -73,6 +73,9 @@ size = Vector2(5, 4)
 collision_mask = 127
 script = ExtResource("1_g18ie")
 
+[node name="PlayerPostion" type="Node2D" parent="."]
+position = Vector2(0, 5)
+
 [node name="OutlineSprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(32, 0)
 sprite_frames = SubResource("SpriteFrames_odfnu")

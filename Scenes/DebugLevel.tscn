@@ -427,7 +427,7 @@ size = Vector2(16, 66)
 [node name="Game" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
-position = Vector2(29, -14)
+position = Vector2(2.08165e-12, 2.08165e-12)
 tile_set = SubResource("TileSet_iroqr")
 collision_visibility_mode = 1
 format = 2
@@ -498,31 +498,31 @@ shape = SubResource("WorldBoundaryShape2D_ydmoj")
 [node name="Ladders" type="Node" parent="."]
 
 [node name="Ladder" parent="Ladders" instance=ExtResource("7_3frhc")]
-position = Vector2(-108, -168)
+position = Vector2(-137, -150)
+
+[node name="LadderTop" parent="Ladders/Ladder" instance=ExtResource("8_adwkj")]
+position = Vector2(2, -17)
 
 [node name="LadderCollisionShape" type="CollisionShape2D" parent="Ladders/Ladder"]
 position = Vector2(0.5, -8)
 shape = SubResource("RectangleShape2D_b6eod")
 
 [node name="Ladder2" parent="Ladders" instance=ExtResource("7_3frhc")]
-position = Vector2(-67, -74)
+position = Vector2(-73, -56)
 
 [node name="LadderCollisionShape" type="CollisionShape2D" parent="Ladders/Ladder2"]
 position = Vector2(0.5, -8)
 shape = SubResource("RectangleShape2D_b6eod")
 
 [node name="Ladder3" parent="Ladders" instance=ExtResource("7_3frhc")]
-position = Vector2(29, 56)
+position = Vector2(25, 71)
+
+[node name="LadderTop2" parent="Ladders/Ladder3" instance=ExtResource("8_adwkj")]
+position = Vector2(0, -51)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ladders/Ladder3"]
 position = Vector2(0, -23)
 shape = SubResource("RectangleShape2D_25dvn")
 
-[node name="LadderTop" parent="." instance=ExtResource("8_adwkj")]
-position = Vector2(-106, -185)
-
-[node name="LadderTop2" parent="." instance=ExtResource("8_adwkj")]
-position = Vector2(29, 5)
-
 [node name="Block" parent="." instance=ExtResource("10_gh4u5")]
-position = Vector2(-99, -201)
+position = Vector2(-103, -185)

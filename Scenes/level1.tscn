@@ -426,7 +426,7 @@ size = Vector2(16, 66)
 [node name="Game" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
-position = Vector2(5, -16)
+position = Vector2(2.08165e-12, 2.08165e-12)
 tile_set = SubResource("TileSet_iroqr")
 collision_visibility_mode = 1
 format = 2
@@ -460,31 +460,31 @@ position_smoothing_enabled = true
 [node name="Coins" type="Node" parent="."]
 
 [node name="Coin" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-148, -168)
+position = Vector2(-182, -151)
 
 [node name="Coin2" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-19, -93)
+position = Vector2(-23, -73)
 
 [node name="Coin3" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-148, -58)
+position = Vector2(-152, -44)
 
 [node name="Coin4" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-226, -59)
+position = Vector2(-216, -44)
 
 [node name="Coin5" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-226, 38)
+position = Vector2(-215, 70)
 
 [node name="Coin6" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-131, 55)
+position = Vector2(-138, 71)
 
 [node name="Coin7" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-18, 55)
+position = Vector2(-27, 71)
 
 [node name="Coin8" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(29, -9)
+position = Vector2(39, 5)
 
 [node name="Coin9" parent="Coins" instance=ExtResource("4_n2hx8")]
-position = Vector2(-82, -9)
+position = Vector2(-87, 5)
 
 [node name="GameManager" parent="." instance=ExtResource("5_48uvm")]
 
@@ -497,7 +497,10 @@ shape = SubResource("WorldBoundaryShape2D_ydmoj")
 [node name="Ladders" type="Node" parent="."]
 
 [node name="Ladder" parent="Ladders" instance=ExtResource("7_njlns")]
-position = Vector2(-131, -168)
+position = Vector2(-137, -152)
+
+[node name="LadderTop" parent="Ladders/Ladder" instance=ExtResource("8_u2abw")]
+position = Vector2(0, -19)
 
 [node name="LadderCollisionShape" type="CollisionShape2D" parent="Ladders/Ladder"]
 position = Vector2(0.5, -8)
@@ -511,14 +514,11 @@ position = Vector2(0.5, -8)
 shape = SubResource("RectangleShape2D_b6eod")
 
 [node name="Ladder3" parent="Ladders" instance=ExtResource("7_njlns")]
-position = Vector2(29, 56)
+position = Vector2(25, 72)
+
+[node name="LadderTop2" parent="Ladders/Ladder3" instance=ExtResource("8_u2abw")]
+position = Vector2(0, -51)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ladders/Ladder3"]
 position = Vector2(0, -23)
 shape = SubResource("RectangleShape2D_25dvn")
-
-[node name="LadderTop" parent="." instance=ExtResource("8_u2abw")]
-position = Vector2(-131, -187)
-
-[node name="LadderTop2" parent="." instance=ExtResource("8_u2abw")]
-position = Vector2(29, 5)
